@@ -2,7 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?rev=6db84d1cc5627708d255de638407208c1df061e4";
+    nixpkgs.url = "github:nixos/nixpkgs?rev=934034b7f676e542e0441d1c1087c1ac86b55033";
     emacs-community = {url = "github:nix-community/emacs-overlay";};
     emacs-community.inputs.nixpkgs.follows = "nixpkgs";
   };

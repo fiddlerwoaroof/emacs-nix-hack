@@ -43,7 +43,7 @@ index 061f176..0aa0217 100644
                                                      process))
                                              (file-exists-p eln-file))
 +                                   (when native-comp-fix-eln-hook
-+                                     (funcall native-comp-fix-eln-hook eln-file))
++                                     (call-process native-comp-fix-eln-hook nil nil nil eln-file))
                                     (native-elisp-load eln-file
                                                        (eq load1 'late))))
                                 (comp--run-async-workers))
