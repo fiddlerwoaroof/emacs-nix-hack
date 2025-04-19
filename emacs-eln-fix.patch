@@ -1,0 +1,49 @@
+diff --git a/lisp/emacs-lisp/comp-run.el b/lisp/emacs-lisp/comp-run.el
+index 061f176..0aa0217 100644
+--- a/lisp/emacs-lisp/comp-run.el
++++ b/lisp/emacs-lisp/comp-run.el
+@@ -39,6 +39,9 @@
+   "Emacs Lisp native compiler runtime."
+   :group 'lisp)
+ 
++(defcustom native-comp-fix-eln-hook
++  "PLACEHOLDER-FOR-PATCH"
++  "function to run to fix eln files")
+ (defcustom native-comp-jit-compilation-deny-list
+   '()
+   "List of regexps to exclude matching files from deferred native compilation.
+@@ -214,6 +217,7 @@ processes from `comp-async-compilations'"
+ (defconst comp-valid-source-re (rx ".el" (? ".gz") eos)
+   "Regexp to match filename of valid input source files.")
+ 
++
+ (defun comp--run-async-workers ()
+   "Start compiling files from `comp-files-queue' asynchronously.
+ When compilation is finished, run `native-comp-async-all-done-hook' and
+@@ -230,7 +234,7 @@ display a message."
+                        source-file)
+          when (or native-comp-always-compile
+                   load ; Always compile when the compilation is
+-                       ; commanded for late load.
++                                        ; commanded for late load.
+                   ;; Skip compilation if `comp-el-to-eln-filename' fails
+                   ;; to find a writable directory.
+                   (with-demoted-errors "Async compilation :%S"
+@@ -294,7 +298,7 @@ display a message."
+                                           comp-async-buffer-name)
+                                        (unless (derived-mode-p 'compilation-mode)
+                                          (emacs-lisp-compilation-mode))
+-			               (current-buffer))
++			                                 (current-buffer))
+                              :command (list
+                                        (expand-file-name invocation-name
+                                                          invocation-directory)
+@@ -316,6 +320,8 @@ display a message."
+                                             (zerop (process-exit-status
+                                                     process))
+                                             (file-exists-p eln-file))
++                                   (when native-comp-fix-eln-hook
++                                     (funcall native-comp-fix-eln-hook eln-file))
+                                    (native-elisp-load eln-file
+                                                       (eq load1 'late))))
+                                (comp--run-async-workers))
